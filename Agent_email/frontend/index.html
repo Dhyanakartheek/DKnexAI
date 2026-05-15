@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Email Agent — DKnex Intelligence</title>
+  <meta name="description" content="AI-powered email automation agent for processing RFPs, RFIs, and JDs. Lead management, task routing, and reporting dashboard." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     LOGIN SCREEN
+═══════════════════════════════════════════════════════════════════════════ -->
+<div id="login-screen" class="login-screen">
+  <div class="login-bg">
+    <div class="login-orb orb-1"></div>
+    <div class="login-orb orb-2"></div>
+    <div class="login-orb orb-3"></div>
+  </div>
+  <div class="login-card glass-card">
+    <div class="login-logo">
+      <div class="logo-icon">✉</div>
+      <h1>AI Email Agent</h1>
+      <p class="login-subtitle">DKnex Intelligence Platform</p>
+    </div>
+    <form id="login-form" class="login-form">
+      <div class="form-group">
+        <label for="login-email">Email Address</label>
+        <input type="email" id="login-email" placeholder="admin@company.com" required autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password" />
+      </div>
+      <div id="login-error" class="error-msg" style="display:none"></div>
+      <button type="submit" class="btn btn-primary btn-full" id="login-btn">
+        <span>Sign In</span>
+        <span class="btn-icon">→</span>
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     MAIN APP
+═══════════════════════════════════════════════════════════════════════════ -->
+<div id="app" style="display:none">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="logo-icon-sm">✉</div>
+        <div>
+          <div class="sidebar-title">Email Agent</div>
+          <div class="sidebar-sub">DKnex AI</div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active" data-page="dashboard" id="nav-dashboard">
+        <span class="nav-icon">⊞</span> Dashboard
+      </a>
+      <a href="#" class="nav-item" data-page="leads" id="nav-leads">
+        <span class="nav-icon">◈</span> Leads
+        <span class="nav-badge" id="badge-leads"></span>
+      </a>
+      <a href="#" class="nav-item" data-page="emails" id="nav-emails">
+        <span class="nav-icon">✉</span> Email Log
+      </a>
+      <a href="#" class="nav-item" data-page="tasks" id="nav-tasks">
+        <span class="nav-icon">✓</span> Tasks
+        <span class="nav-badge" id="badge-tasks"></span>
+      </a>
+      <a href="#" class="nav-item" data-page="drafts" id="nav-drafts">
+        <span class="nav-icon">✎</span> Drafts
+        <span class="nav-badge pending" id="badge-drafts"></span>
+      </a>
+      <a href="#" class="nav-item" data-page="reports" id="nav-reports">
+        <span class="nav-icon">⋮⋮</span> Reports
+      </a>
+      <a href="#" class="nav-item admin-only" data-page="users" id="nav-users" style="display:none">
+        <span class="nav-icon">👥</span> Users
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info" id="sidebar-user">
+        <div class="user-avatar" id="user-avatar">A</div>
+        <div class="user-details">
+          <div class="user-name" id="user-name">Admin</div>
+          <div class="user-role" id="user-role">Administrator</div>
+        </div>
+      </div>
+      <button class="btn-logout" id="logout-btn" title="Logout">⏻</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menu-toggle">☰</button>
+        <div class="page-breadcrumb" id="page-title">Dashboard</div>
+      </div>
+      <div class="topbar-right">
+        <div class="agent-status" id="agent-status">
+          <span class="status-dot active"></span>
+          <span class="status-text">Agent Active</span>
+        </div>
+        <button class="btn btn-sm btn-secondary" id="poll-btn" title="Manually trigger email check">
+          ↻ Poll Now
+        </button>
+      </div>
+    </header>
+
+    <!-- Pages -->
+    <!-- DASHBOARD -->
+    <section class="page active" id="page-dashboard">
+      <div class="page-header">
+        <h2>Overview</h2>
+        <p>Real-time intelligence on your email pipeline</p>
+      </div>
+
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card" id="stat-total">
+          <div class="stat-icon">◈</div>
+          <div class="stat-value" id="stat-total-val">—</div>
+          <div class="stat-label">Total Leads</div>
+        </div>
+        <div class="stat-card accent-rfp" id="stat-rfp">
+          <div class="stat-icon">📋</div>
+          <div class="stat-value" id="stat-rfp-val">—</div>
+          <div class="stat-label">RFPs</div>
+        </div>
+        <div class="stat-card accent-rfi" id="stat-rfi">
+          <div class="stat-icon">ℹ</div>
+          <div class="stat-value" id="stat-rfi-val">—</div>
+          <div class="stat-label">RFIs</div>
+        </div>
+        <div class="stat-card accent-jd" id="stat-jd">
+          <div class="stat-icon">👤</div>
+          <div class="stat-value" id="stat-jd-val">—</div>
+          <div class="stat-label">Job Descriptions</div>
+        </div>
+        <div class="stat-card accent-email" id="stat-email">
+          <div class="stat-icon">✉</div>
+          <div class="stat-value" id="stat-email-val">—</div>
+          <div class="stat-label">Emails Processed</div>
+        </div>
+        <div class="stat-card accent-draft" id="stat-draft">
+          <div class="stat-icon">✎</div>
+          <div class="stat-value" id="stat-draft-val">—</div>
+          <div class="stat-label">Pending Drafts</div>
+        </div>
+      </div>
+
+      <div class="dashboard-bottom">
+        <div class="dash-card glass-card">
+          <div class="dash-card-header">
+            <h3>Lead Status Breakdown</h3>
+          </div>
+          <div class="status-bars" id="status-bars"></div>
+        </div>
+
+        <div class="dash-card glass-card">
+          <div class="dash-card-header">
+            <h3>Activity Log</h3>
+          </div>
+          <div class="activity-list" id="activity-list">
+            <div class="empty-state">Loading…</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEADS -->
+    <section class="page" id="page-leads">
+      <div class="page-header">
+        <h2>Lead Tracker</h2>
+        <div class="page-actions">
+          <select class="filter-select" id="lead-status-filter">
+            <option value="">All Statuses</option>
+            <option value="New">New</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Closed">Closed</option>
+            <option value="Won">Won</option>
+            <option value="Lost">Lost</option>
+          </select>
+          <select class="filter-select" id="lead-type-filter">
+            <option value="">All Types</option>
+            <option value="RFP">RFP</option>
+            <option value="RFI">RFI</option>
+            <option value="JD">JD</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrapper glass-card">
+        <table class="data-table" id="leads-table">
+          <thead>
+            <tr>
+              <th>Lead ID</th>
+              <th>Type</th>
+              <th>Client</th>
+              <th>Project / Role</th>
+              <th>Deadline</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="leads-tbody">
+            <tr><td colspan="7" class="empty-state">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- EMAIL LOG -->
+    <section class="page" id="page-emails">
+      <div class="page-header">
+        <h2>Email Log</h2>
+        <p>All emails monitored by the agent</p>
+      </div>
+      <div class="table-wrapper glass-card">
+        <table class="data-table" id="emails-table">
+          <thead>
+            <tr>
+              <th>Received</th>
+              <th>From</th>
+              <th>Subject</th>
+              <th>Classification</th>
+              <th>Lead</th>
+            </tr>
+          </thead>
+          <tbody id="emails-tbody">
+            <tr><td colspan="5" class="empty-state">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TASKS -->
+    <section class="page" id="page-tasks">
+      <div class="page-header">
+        <h2>Task Management</h2>
+      </div>
+      <div class="tasks-grid" id="tasks-columns">
+        <div class="task-column glass-card">
+          <div class="task-col-header pending">⏳ Pending</div>
+          <div class="task-col-body" id="tasks-pending"></div>
+        </div>
+        <div class="task-column glass-card">
+          <div class="task-col-header in-progress">⚡ In Progress</div>
+          <div class="task-col-body" id="tasks-inprogress"></div>
+        </div>
+        <div class="task-column glass-card">
+          <div class="task-col-header done">✓ Done</div>
+          <div class="task-col-body" id="tasks-done"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DRAFTS -->
+    <section class="page" id="page-drafts">
+      <div class="page-header">
+        <h2>Email Drafts</h2>
+        <p>Review and approve AI-generated emails before sending</p>
+      </div>
+      <div class="drafts-list" id="drafts-list">
+        <div class="empty-state">Loading…</div>
+      </div>
+    </section>
+
+    <!-- REPORTS -->
+    <section class="page" id="page-reports">
+      <div class="page-header">
+        <h2>Reports & Exports</h2>
+      </div>
+      <div class="reports-grid">
+        <div class="report-card glass-card" id="report-excel">
+          <div class="report-icon">📊</div>
+          <h3>Excel Report</h3>
+          <p>Full lead tracker with all data, status summaries, and analytics</p>
+          <a href="/api/reports/excel" id="excel-download-btn" class="btn btn-primary">
+            ↓ Download Excel
+          </a>
+        </div>
+        <div class="report-card glass-card" id="report-pdf">
+          <div class="report-icon">📄</div>
+          <h3>PDF Report</h3>
+          <p>Formatted weekly summary report with lead details and status breakdown</p>
+          <a href="/api/reports/pdf" id="pdf-download-btn" class="btn btn-secondary">
+            ↓ Download PDF
+          </a>
+        </div>
+      </div>
+    </section>
+    <!-- USERS (Admin only) -->
+    <section class="page" id="page-users">
+      <div class="page-header">
+        <div>
+          <h2>User Management</h2>
+          <p>Add, edit, and manage team members &amp; stakeholders</p>
+        </div>
+        <button class="btn btn-primary" id="toggle-add-user-btn">+ Add User</button>
+      </div>
+
+      <!-- Add User Inline Form -->
+      <div class="glass-card" id="add-user-panel" style="display:none;padding:1.5rem">
+        <h3 style="margin-bottom:1rem;font-size:1rem">New Team Member</h3>
+        <div class="modal-grid">
+          <div class="form-group"><label>Full Name</label>
+            <input id="nu-name" placeholder="John Doe" /></div>
+          <div class="form-group"><label>Email</label>
+            <input id="nu-email" type="email" placeholder="john@company.com" /></div>
+          <div class="form-group"><label>Password</label>
+            <input id="nu-password" type="password" placeholder="••••••••" /></div>
+          <div class="form-group"><label>Role</label>
+            <select id="nu-role">
+              <option value="staff">Staff</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <div class="form-group" style="grid-column:span 2"><label>Skills (comma-separated)</label>
+            <input id="nu-skills" placeholder="python, ml, react, java" /></div>
+        </div>
+        <div style="margin-top:1rem;display:flex;gap:8px">
+          <button class="btn btn-primary" id="nu-submit">Create User</button>
+          <button class="btn btn-secondary" id="nu-cancel">Cancel</button>
+        </div>
+        <div id="nu-error" class="error-msg" style="display:none;margin-top:0.5rem"></div>
+      </div>
+
+      <!-- Users Table -->
+      <div class="table-wrapper glass-card">
+        <table class="data-table" id="users-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Skills</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-tbody">
+            <tr><td colspan="6" class="empty-state">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Lead Detail Modal -->
+<div class="modal-overlay" id="lead-modal" style="display:none">
+  <div class="modal glass-card">
+    <div class="modal-header">
+      <h3 id="modal-lead-id">Lead Details</h3>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="modal-close-btn">Close</button>
+      <button class="btn btn-primary" id="modal-save-btn">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>

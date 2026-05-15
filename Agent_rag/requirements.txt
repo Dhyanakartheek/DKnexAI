@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+langchain
+langchain-community
+langchain-openai
+langchain-core
+langchain-groq
+langgraph
+faiss-cpu
+torch
+sentence-transformers
+pydantic

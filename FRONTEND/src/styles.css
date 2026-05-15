@@ -1,0 +1,169 @@
+/* Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Colors - Obsidian & Electric Gradient */
+  --bg-primary: #050505;
+  --bg-secondary: #0a0a0c;
+  --bg-card: rgba(15, 15, 20, 0.7);
+  
+  --accent-indigo: #6366f1;
+  --accent-purple: #a855f7;
+  --accent-pink: #ec4899;
+  --accent-gradient: linear-gradient(135deg, var(--accent-indigo) 0%, var(--accent-purple) 50%, var(--accent-pink) 100%);
+  --accent-glow: rgba(99, 102, 241, 0.3);
+  
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0b0;
+  --text-muted: #64748b;
+  
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: blur(12px);
+  
+  /* Effects */
+  --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+  --accent-shadow: 0 0 20px var(--accent-glow);
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+app-root {
+  display: block;
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Glassmorphism Utility */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--card-shadow);
+  transition: var(--transition-smooth);
+}
+
+.glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.9);
+}
+
+/* Gradient Text Clipping */
+.gradient-text {
+  background: var(--accent-gradient);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block; /* Helps with clipping precision */
+  line-height: 1.2;
+  padding-bottom: 0.1em;
+  vertical-align: middle;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: #222;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-purple);
+}
+
+/* Material Design Overrides */
+.mat-mdc-card {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.mat-mdc-form-field {
+  margin-bottom: 16px;
+}
+
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+  border-color: var(--glass-border) !important;
+  transition: var(--transition-smooth);
+}
+
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: var(--accent-indigo) !important;
+  border-width: 1px !important;
+}
+
+/* Premium Buttons */
+.btn-primary {
+  background: var(--accent-gradient) !important;
+  color: white !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 12px !important;
+  padding: 0 24px !important;
+  box-shadow: var(--accent-shadow) !important;
+  transition: var(--transition-smooth) !important;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--accent-glow) !important;
+  filter: brightness(1.1);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Background Animation Elements */
+.bg-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Shimmer Loading Effect */
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+  
+.markdown-clipboard-button { background: #333; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; transition: 0.2s; }  
+.markdown-clipboard-button:hover { background: #555; } 
