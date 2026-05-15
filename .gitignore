@@ -1,24 +1,43 @@
-# Compiled class file
-*.class
-
-# Log file
+# --- IDE & System Files ---
+.idea/
+.vscode/
+*.swp
 *.log
+.DS_Store
+Thumbs.db
 
-# BlueJ files
-*.ctxt
+# --- Java / Maven (BACKEND) ---
+BACKEND/target/
+BACKEND/*.jar
+BACKEND/*.war
+BACKEND/*.ear
+BACKEND/.project
+BACKEND/.classpath
+BACKEND/.settings/
+BACKEND/bin/
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# --- Node / Angular (FRONTEND) ---
+FRONTEND/node_modules/
+FRONTEND/dist/
+FRONTEND/.angular/
+FRONTEND/tmp/
+FRONTEND/out-tsc/
+FRONTEND/bazel-out/
+node_modules/
 
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
+# --- Python (Agents) ---
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+**/.env
+**/venv/
+**/env/
+**/.venv/
+**/.pytest_cache/
+**/instance/
+**/.web_cache/
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+# --- Local Configuration ---
+.env
+.env.local
+.env.*.local
