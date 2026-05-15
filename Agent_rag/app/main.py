@@ -58,7 +58,20 @@ class QueryRequest(BaseModel):
 class QueryResponse(BaseModel):
     answer: str
 
+def is_greeting(query: str) -> bool:
+    greetings = ["hi", "hello", "hey", "good morning", "good evening", "greetings"]
+    return query.lower().strip() in greetings
+
 def ask_rag(query: str) -> str:
+    if is_greeting(query):
+        import json
+        return json.dumps({
+            "title": "Welcome",
+            "direct_answer": "Hi! How can I help you today?",
+            "key_points": [],
+            "tips": []
+        })
+
     if not rag_initialized:
         raise Exception("RAG components are not properly initialized. Check your configuration and environment variables.")
         
@@ -74,25 +87,67 @@ def ask_rag(query: str) -> str:
             
         # Step 3: Prompt
         prompt = f"""
-You are an expert AI assistant.
+Return ONLY valid JSON. No extra text. Ensure your answer is highly detailed, informative, and comprehensive.
 
-Use ONLY the context below. If the answer is not in the context, say "I don't have enough information to answer that."
+{{
+  "title": "Descriptive and engaging title",
+  "direct_answer": "A comprehensive, detailed explanation containing at least 4-6 sentences. Provide deep context.",
+  "key_points": ["Detailed point 1", "Detailed point 2", "Detailed point 3", "Detailed point 4", "Detailed point 5"],
+  "tips": ["Actionable tip 1", "Actionable tip 2", "Actionable tip 3", "Actionable tip 4", "Actionable tip 5"]
+}}
 
 Context:
 {context}
 
 Question:
 {query}
-
-Answer clearly with:
-- Direct answer
-- Key points
-- Practical tips
 """
         
         # Step 4: Generate
         response = llm.invoke(prompt)
-        return response.content
+        
+        import json
+        try:
+            # Clean up potential markdown formatting and extra text from LLM
+            raw_content = response.content.strip()
+            
+            # Extract just the JSON part (from first { to last })
+            start_idx = raw_content.find('{')
+            end_idx = raw_content.rfind('}')
+            
+            if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
+                json_str = raw_content[start_idx:end_idx+1]
+            else:
+                json_str = raw_content
+                
+            # Parse and clean data
+            data = json.loads(json_str)
+            
+            # Clean data
+            if "key_points" in data and isinstance(data["key_points"], list):
+                data["key_points"] = list(dict.fromkeys(data["key_points"]))[:10]
+            else:
+                data["key_points"] = []
+                
+            if "tips" in data and isinstance(data["tips"], list):
+                data["tips"] = list(dict.fromkeys(data["tips"]))[:10]
+            else:
+                data["tips"] = []
+                
+            if "title" not in data:
+                data["title"] = "Answer"
+                
+            return json.dumps(data)
+            
+        except json.JSONDecodeError:
+            # Safe parse fallback
+            fallback_data = {
+                "title": "Answer",
+                "direct_answer": response.content,
+                "key_points": [],
+                "tips": []
+            }
+            return json.dumps(fallback_data)
     except Exception as e:
         logger.error(f"RAG Error: {e}")
         raise e

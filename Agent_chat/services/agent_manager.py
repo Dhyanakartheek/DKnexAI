@@ -8,12 +8,13 @@ class AgentManager:
     def __init__(self):
         formatting_rules = """
 Return ONLY valid JSON. No extra text. Do NOT include markdown formatting like ```json.
+Ensure your answer is highly detailed, informative, and comprehensive.
 
 {
-  "title": "Short descriptive title",
-  "direct_answer": "Clear, concise direct answer to the user's prompt",
-  "key_points": ["point 1", "point 2"],
-  "tips": ["tip 1", "tip 2"],
+  "title": "Descriptive and engaging title",
+  "direct_answer": "A comprehensive, detailed explanation containing at least 4-6 sentences. Provide deep context.",
+  "key_points": ["Detailed point 1", "Detailed point 2", "Detailed point 3", "Detailed point 4", "Detailed point 5"],
+  "tips": ["Actionable tip 1", "Actionable tip 2", "Actionable tip 3", "Actionable tip 4", "Actionable tip 5"],
   "code": "Optional code snippet if relevant. Leave as empty string if no code is requested. Do NOT wrap in markdown backticks."
 }
 """
