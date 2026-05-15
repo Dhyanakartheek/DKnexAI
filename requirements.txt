@@ -1,0 +1,25 @@
+# Master Requirements for DKnexAI Platform
+fastapi
+uvicorn
+python-dotenv
+pydantic
+pydantic-settings
+requests
+httpx
+groq
+langchain
+langchain-core
+langchain-community
+langchain-groq
+langchain-openai
+langchain-huggingface
+langgraph
+faiss-cpu
+torch
+sentence-transformers
+watchfiles
+sqlalchemy
+aiosqlite
+apscheduler
+python-multipart
+jinja2
