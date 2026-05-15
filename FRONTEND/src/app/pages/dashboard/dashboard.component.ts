@@ -34,7 +34,7 @@ import { AuthService } from '../../services/auth.service';
             <mat-icon>code</mat-icon>
             Code Workspace
           </button>
-          <button class="btn-primary deploy-btn" (click)="showModal = true">
+          <button *ngIf="isAdmin" class="btn-primary deploy-btn" (click)="showModal = true">
             <mat-icon>add</mat-icon>
             Deploy Agent
           </button>
@@ -66,7 +66,7 @@ import { AuthService } from '../../services/auth.service';
         <div class="empty-icon"><mat-icon>terminal</mat-icon></div>
         <h3>No neural agents detected.</h3>
         <p>Create your first AI agent to begin orchestration.</p>
-        <button class="btn-primary" (click)="showModal = true">Deploy First Agent</button>
+        <button *ngIf="isAdmin" class="btn-primary" (click)="showModal = true">Deploy First Agent</button>
       </div>
     </div>
 

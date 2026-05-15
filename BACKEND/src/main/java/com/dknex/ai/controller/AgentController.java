@@ -35,6 +35,7 @@ public class AgentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public Agent createAgent(@Valid @RequestBody AgentRequest agentRequest) {
         Agent agent = new Agent();
@@ -46,6 +47,7 @@ public class AgentController {
         return agentService.createAgent(agent);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Agent> updateAgent(@PathVariable Long id, @Valid @RequestBody AgentRequest agentRequest) {
         Agent agentDetails = new Agent();
@@ -57,17 +59,20 @@ public class AgentController {
         return ResponseEntity.ok(agentService.updateAgent(id, agentDetails));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAgent(@PathVariable Long id) {
         agentService.deleteAgent(id);
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}/toggle")
     public ResponseEntity<Agent> toggleAgentStatus(@PathVariable Long id) {
         return ResponseEntity.ok(agentService.toggleStatus(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/status")
     public ResponseEntity<Agent> updateAgentStatus(@PathVariable Long id, @RequestBody Map<String, Boolean> statusUpdate) {
         boolean status = statusUpdate.getOrDefault("status", true);

@@ -1,0 +1,38 @@
+[Unit]
+Description=DKnexAI Agent Email (FastAPI :8080)
+Documentation=https://github.com/yourusername/DKnexAI
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=exec
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/opt/dknexai/Agent_email
+
+EnvironmentFile=/opt/dknexai/Agent_email/.env
+Environment=PATH=/opt/dknexai/venv/bin:/usr/local/bin:/usr/bin:/bin
+Environment=PYTHONPATH=/opt/dknexai/Agent_email
+Environment=PYTHONUNBUFFERED=1
+
+# Single worker — APScheduler background jobs must not be duplicated
+ExecStart=/opt/dknexai/venv/bin/uvicorn main:app \
+    --host 127.0.0.1 \
+    --port 8080 \
+    --workers 1 \
+    --log-level info \
+    --access-log
+
+Restart=always
+RestartSec=5
+StartLimitIntervalSec=60
+StartLimitBurst=5
+
+StandardOutput=append:/opt/dknexai/logs/email/app.log
+StandardError=append:/opt/dknexai/logs/email/error.log
+
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

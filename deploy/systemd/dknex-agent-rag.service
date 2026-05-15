@@ -1,0 +1,42 @@
+[Unit]
+Description=DKnexAI Agent RAG (FastAPI :8002)
+Documentation=https://github.com/yourusername/DKnexAI
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=exec
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/opt/dknexai/Agent_rag
+
+EnvironmentFile=/opt/dknexai/Agent_rag/.env
+Environment=PATH=/opt/dknexai/venv/bin:/usr/local/bin:/usr/bin:/bin
+# PYTHONPATH must include the project root so 'app.retriever.vector_db' resolves
+Environment=PYTHONPATH=/opt/dknexai/Agent_rag
+Environment=PYTHONUNBUFFERED=1
+
+# Single worker — FAISS in-memory index is NOT fork-safe
+ExecStart=/opt/dknexai/venv/bin/uvicorn app.main:app \
+    --host 127.0.0.1 \
+    --port 8002 \
+    --workers 1 \
+    --log-level info \
+    --access-log
+
+Restart=always
+RestartSec=10
+StartLimitIntervalSec=120
+StartLimitBurst=3
+
+StandardOutput=append:/opt/dknexai/logs/rag/app.log
+StandardError=append:/opt/dknexai/logs/rag/error.log
+
+# FAISS startup can be slow (embedding model load) — give it 120s
+TimeoutStartSec=120
+
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

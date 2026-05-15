@@ -37,7 +37,24 @@ node_modules/
 **/instance/
 **/.web_cache/
 
-# --- Local Configuration ---
+# --- Local Configuration & Secrets ---
 .env
 .env.local
 .env.*.local
+deploy/.env.production   # never commit the filled-in secrets
+
+# --- Database files ---
+**/*.db
+**/*.sqlite
+**/*.sqlite3
+
+# --- FAISS vector index ---
+Agent_rag/app/data/*.faiss
+Agent_rag/app/data/*.pkl
+Agent_rag/app/retriever/faiss_index/
+
+# --- Built JARs (use CI to build) ---
+BACKEND/target/*.jar
+
+# --- Python venv on server ---
+venv/

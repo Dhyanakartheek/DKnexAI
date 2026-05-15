@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Agent, ExecuteRequest, ExecuteResponse, AgentLog } from '../models/agent.models';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AgentService {
-  private readonly BASE_URL = 'http://localhost:8081/api';
+  private readonly BASE_URL = environment.apiUrl;
   private readonly API_URL = `${this.BASE_URL}/agents`;
   private readonly LOGS_URL = `${this.BASE_URL}/logs`;
 

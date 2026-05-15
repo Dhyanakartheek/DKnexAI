@@ -1,0 +1,40 @@
+[Unit]
+Description=DKnexAI Spring Boot Backend (:8081)
+Documentation=https://github.com/yourusername/DKnexAI
+After=network-online.target mysql.service
+Requires=mysql.service
+
+[Service]
+Type=exec
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/opt/dknexai/BACKEND
+
+# Load env vars (DB credentials, JWT secret, etc.)
+EnvironmentFile=/opt/dknexai/.env
+Environment=SPRING_PROFILES_ACTIVE=prod
+
+ExecStart=/usr/bin/java \
+    -Xms256m \
+    -Xmx768m \
+    -XX:+UseG1GC \
+    -XX:MaxGCPauseMillis=200 \
+    -Dspring.profiles.active=prod \
+    -Dfile.encoding=UTF-8 \
+    -jar /opt/dknexai/BACKEND/target/ai-backend-0.0.1-SNAPSHOT.jar
+
+Restart=always
+RestartSec=10
+StartLimitIntervalSec=120
+StartLimitBurst=3
+
+# Spring Boot needs up to 60s to start on small instances
+TimeoutStartSec=90
+
+StandardOutput=append:/opt/dknexai/logs/backend/app.log
+StandardError=append:/opt/dknexai/logs/backend/error.log
+
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
