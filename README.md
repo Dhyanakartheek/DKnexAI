@@ -1,4 +1,4 @@
-# DKnexAI — Multi-Agent AI Automation Platform 🚀
+# DKnexAI — Multi-Agent AI Automation Platform 
 
 DKnexAI is a high-performance, multi-agent ecosystem designed to automate complex business workflows, provide intelligent data retrieval, and assist in technical development. It leverages a specialized router architecture to delegate tasks to autonomous agents optimized for specific domains.
 
@@ -17,10 +17,15 @@ DKnexAI is more than just a chatbot; it's a comprehensive **Multi-Agent AI Autom
 ## 🔹 Features
 
 ✅ **RAG Advisor Agent:** Intelligent document retrieval using FAISS and Groq. Perfect for analyzing technical manuals or medical encyclopedias.
+
 ✅ **AI Chat Agent:** General-purpose conversational assistant for brainstorming and daily tasks.
+
 ✅ **AI Code Agent:** Senior-level engineering assistant that generates production-ready code and debugs complex logic.
+
 ✅ **AI Email Automation Agent:** Automates lead classification, draft generation, and follow-up scheduling.
+
 ✅ **Role-Based Dashboard:** Secure admin and staff views for managing leads and agents.
+
 ✅ **Lead Management:** End-to-end tracking of business opportunities with automated reporting.
 
 ---
@@ -31,7 +36,7 @@ DKnexAI uses a hub-and-spoke model where a central logic layer (Jarvis Router) m
 
 ```mermaid
 graph TD
-    User((User)) --> Router[Jarvis Router / Frontend]
+    User((User)) --> Router[Frontend]
     Router --> ChatAgent[Chat Agent]
     Router --> CodeAgent[Code Agent]
     Router --> RAGAgent[RAG Advisor Agent]
