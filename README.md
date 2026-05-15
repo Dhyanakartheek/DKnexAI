@@ -98,4 +98,4 @@ python -m app.main
 
 ---
 
-*Developed with ❤️ by the DKnex AI Team*
+*Developed with ❤️ by Dhyana Kartheek*
